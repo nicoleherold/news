@@ -1,4 +1,5 @@
 
+// List json file und übergibt Daten an Main-function appendData
 fetch('data.json')
     .then(function (response) {
         return response.json();
@@ -12,11 +13,12 @@ fetch('data.json')
 
 
 
-
+// Main-Function
 function appendData(data) {
     let mainContainer = document.getElementById("allArticles");
+    // Loop über alle Artikel
     for (let i = 0; i < data.length; i++) {
-
+        //Headlineelemente erstellen
         let divTitleheader = document.createElement("div");
         divTitleheader.classList.add('titleheader');
         divTitleheader.innerHTML = data[i].titleheader 
@@ -29,13 +31,12 @@ function appendData(data) {
         divLead.classList.add('lead');
         divLead.innerHTML = data[i].lead
 
-
+        // Original-Text und Button dazu erstellen
         let divOriginal = document.createElement("div");
         divOriginal.classList.add('original');
         divOriginal.classList.add('hidden');
         let idName = 'originalText' + i
         divOriginal.id = idName;
-        //divOriginal.setAttribute('id', idName);
         divOriginal.innerHTML = '<b>Original:</b> ' + data[i].originaltext  + '<br><b>' + data[i].flesch[0] + '</b>'
 
         let originalButton = document.createElement('button');
@@ -54,7 +55,7 @@ function appendData(data) {
             }
           };
 
-
+        //  Button zu Artikel-Link erstellen
         let urlButton = document.createElement('button');
         urlButton.innerHTML = 'Artikel >>';
         urlButton.classList.add('url');
@@ -63,7 +64,7 @@ function appendData(data) {
             window.open(data[i].url, '_blank');
             };
 
-
+        //  Owwn = Wortbewertungsalgo-Text und Button dazu erstellen
         let divOwn = document.createElement("div");
         divOwn.classList.add('own');
         divOwn.classList.add('hidden');
@@ -87,36 +88,31 @@ function appendData(data) {
             }
           };
 
+        //  Sumy-Text und Button dazu erstellen        
+        let divSumy = document.createElement("div");
+        divSumy.classList.add('sumy');
+        divSumy.classList.add('hidden');
+        let idSumy = 'sumy' + i
+        divSumy.id = idSumy;
+        divSumy.innerHTML = '<b>Sumy:</b> ' + data[i].lexrank_sumy 
 
-          let divSumy = document.createElement("div");
-          divSumy.classList.add('sumy');
-          divSumy.classList.add('hidden');
-          let idSumy = 'sumy' + i
-          divSumy.id = idSumy;
-          divSumy.innerHTML = '<b>Sumy:</b> ' + data[i].lexrank_sumy 
-  
-          let sumyButton = document.createElement('button');
-          sumyButton.innerHTML = 'Sumy';
-          sumyButton.classList.add('buttonSumy');
-          sumyButton.onclick =  function() {
-              sumyButton.classList.toggle("active");
-              let idSumy = 'sumy' + i
-              let sumy = document.getElementById(idSumy);
-              if (sumy.classList.contains("hidden")) {
-                  sumy.classList.remove("hidden");
-                  sumy.classList.add("visible");
-              } else {
-                  sumy.classList.remove("visible");
-                  sumy.classList.add("hidden");
-              }
-            };
+        let sumyButton = document.createElement('button');
+        sumyButton.innerHTML = 'Sumy';
+        sumyButton.classList.add('buttonSumy');
+        sumyButton.onclick =  function() {
+            sumyButton.classList.toggle("active");
+            let idSumy = 'sumy' + i
+            let sumy = document.getElementById(idSumy);
+            if (sumy.classList.contains("hidden")) {
+                sumy.classList.remove("hidden");
+                sumy.classList.add("visible");
+            } else {
+                sumy.classList.remove("visible");
+                sumy.classList.add("hidden");
+            }
+        };
 
-
-
-
-
-            
-
+        //  Normale Summaries-Text und Button dazu erstellen
         let divSummary = document.createElement("div");
         divSummary.classList.add('gpt-summary');
         divSummary.classList.add('hidden');
@@ -142,7 +138,7 @@ function appendData(data) {
             }
           };
 
-
+        //  Simple Summaries-Text und Button dazu erstellen
         let divSimple = document.createElement("div");
         divSimple.classList.add('gpt-simple');
         divSimple.classList.add('hidden');
@@ -166,10 +162,7 @@ function appendData(data) {
             }
         }; 
 
-
-
-
-
+        //  Child Summaries-Text und Button dazu erstellen
         let divChild = document.createElement("div");
         divChild.classList.add('gpt-child');
         divChild.classList.add('hidden');
@@ -194,7 +187,7 @@ function appendData(data) {
         };
 
 
-
+        //  KeyNote GPT-3-Text und Button dazu erstellen
         let divKey = document.createElement("div");
         divKey.classList.add('gpt-key');
         divKey.classList.add('hidden');
@@ -220,7 +213,7 @@ function appendData(data) {
             }
         };
 
-
+        //  KeyNote davinci-Text und Button dazu erstellen
         let divKeyDavi = document.createElement("div");
         divKeyDavi.classList.add('davinci');
         divKeyDavi.classList.add('hidden');
@@ -248,7 +241,7 @@ function appendData(data) {
         };
 
 
-
+        //  KeyNote GPT-4-Text und Button dazu erstellen
         let divKeyGpt4 = document.createElement("div");
         divKeyGpt4.classList.add('keyGpt4');
         divKeyGpt4.classList.add('hidden');
@@ -276,10 +269,7 @@ function appendData(data) {
         };
 
         
-        /* Fragen / Antworten   Spacy*/
-
-
-        
+/* ------- Fragen / Antworten   Spacy*/
             //Randomisiert Fragen zusammenstellen, Zahl zwischen 1 und 3 ausgebe
             // 1 => Reihenfolge: 1 2 3; 2 => Reihenfolge: 2 3 1; 3 => Reihenfolge: 3 1 2;
             answerOrderSpacy = (Math.floor(Math.random() * 3)+1);
@@ -292,10 +282,8 @@ function appendData(data) {
             let questSpacy = document.createElement("p");
             questSpacy.innerHTML = '<b>' + questionSpacy + '</b>' + '<br>'
 
-            //Frage in From einfügen
+            //Frage in Form einfügen
             formQASpacy.appendChild(questSpacy)
-
-
 
             //Antwort 1 darstellen
             answer1spacy = data[i].frage_antwort[1]
@@ -309,10 +297,6 @@ function appendData(data) {
             // ans1Label.for = "answ" + "_" + i + "_1"
             ans1Labelspacy.innerHTML = answer1spacy + '<br>'
 
-
-
-
-
             //Antwort 2 darstellen
             answer2spacy = data[i].frage_antwort[2]
             let ans2spacy = document.createElement("input");
@@ -325,9 +309,6 @@ function appendData(data) {
             // ans2Label.for = "answ" + "_" + i + "_2"
             ans2Labelspacy.innerHTML = answer2spacy + '<br>'
 
-
-
-
             //Antwort 3 darstellen
             answer3spacy = data[i].frage_antwort[3]
             let ans3spacy = document.createElement("input");
@@ -339,11 +320,6 @@ function appendData(data) {
             let ans3Labelspacy = document.createElement("label");
             // ans3Label.for = "answ" + "_" + i + "_3"
             ans3Labelspacy.innerHTML = answer3spacy + '<br>';
-
-
-
-
-
 
 
             // Fragen nach AnswerOrder einfügen:
@@ -372,8 +348,6 @@ function appendData(data) {
                 formQASpacy.appendChild(ans2Labelspacy);
             }
 
-
-
             // Checkbutton
             let checkButtonSpacy = document.createElement("button");
             checkButtonSpacy.innerHTML = 'check Antwort spacy';
@@ -393,7 +367,6 @@ function appendData(data) {
             formQASpacy.appendChild(checkButtonSpacy);
 
             //Create Div für Checkantwort
-
             let checkDivSpacy = document.createElement("div");
             let idCheckQuestionSpacy = "checkSpacy" + i;
             checkDivSpacy.id = idCheckQuestionSpacy;
@@ -401,8 +374,6 @@ function appendData(data) {
             formQASpacy.appendChild(checkDivSpacy);
         
     
-
-
             // CheckButton für Antworten
             let qaButtonSpacy = document.createElement('button');
             qaButtonSpacy.innerHTML = '? spacy';
@@ -421,8 +392,7 @@ function appendData(data) {
             };
 
 
-        /* Fragen / Antworten   GPT3*/
-
+/* ------------- Fragen / Antworten   GPT3 */
 
         //Randomisiert Fragen zusammenstellen, Zahl zwischen 1 und 3 ausgebe
         // 1 => Reihenfolge: 1 2 3; 2 => Reihenfolge: 2 3 1; 3 => Reihenfolge: 3 1 2;
@@ -436,10 +406,8 @@ function appendData(data) {
         let quest = document.createElement("p");
         quest.innerHTML = '<b>' + question + '</b>' + '<br>'
 
-        //Frage in From einfügen
+        //Frage in Form einfügen
         formQA.appendChild(quest)
-
-
 
         //Antwort 1 darstellen
         answer1 = data[i].qa_list[1]
@@ -453,10 +421,6 @@ function appendData(data) {
         // ans1Label.for = "answ" + "_" + i + "_1"
         ans1Label.innerHTML = answer1 + '<br>'
 
-
-
-
-
         //Antwort 2 darstellen
         answer2 = data[i].qa_list[2]
         let ans2 = document.createElement("input");
@@ -469,9 +433,6 @@ function appendData(data) {
         // ans2Label.for = "answ" + "_" + i + "_2"
         ans2Label.innerHTML = answer2 + '<br>'
 
-
-
-
         //Antwort 3 darstellen
         answer3 = data[i].qa_list[3]
         let ans3 = document.createElement("input");
@@ -483,11 +444,6 @@ function appendData(data) {
         let ans3Label = document.createElement("label");
         // ans3Label.for = "answ" + "_" + i + "_3"
         ans3Label.innerHTML = answer3 + '<br>';
-
-
-
-
-
 
 
         // Fragen nach AnswerOrder einfügen:
@@ -517,7 +473,6 @@ function appendData(data) {
         }
 
 
-
         // Checkbutton
         let checkButton = document.createElement("button");
         checkButton.innerHTML = 'check Antwort gpt3';
@@ -544,9 +499,6 @@ function appendData(data) {
 
         formQA.appendChild(checkDiv);
        
- 
-
-
         // CheckButton für Antworten
         let qaButton = document.createElement('button');
         qaButton.innerHTML = '? gpt3';
@@ -565,18 +517,13 @@ function appendData(data) {
         };
 
 
-
-
-
-
-         /* Fragen / Antworten  gpt4 */
-
+/* ----------- Fragen / Antworten  gpt4 */
 
         //Randomisiert Fragen zusammenstellen, Zahl zwischen 1 und 3 ausgebe
         // 1 => Reihenfolge: 1 2 3; 2 => Reihenfolge: 2 3 1; 3 => Reihenfolge: 3 1 2;
         answerOrderB = (Math.floor(Math.random() * 3)+1);
 
-        // frage darstellen
+        // Frage darstellen
         questionB = data[i].qa_list_gpt4[0]
         let formQAB = document.createElement("form");
         formQAB.classList.add('hidden');
@@ -584,10 +531,8 @@ function appendData(data) {
         let questB = document.createElement("p");
         questB.innerHTML = '<b>' + questionB + '</b>' + '<br>'
 
-        //Frage in From einfügen
+        //Frage in Form einfügen
         formQAB.appendChild(questB)
-
-
 
         //Antwort 1 darstellen
         answerB1 = data[i].qa_list_gpt4[1]
@@ -601,10 +546,6 @@ function appendData(data) {
         // ans1Label.for = "answ" + "_" + i + "_1"
         ansB1Label.innerHTML = answerB1 + '<br>'
 
-
-
-
-
         //Antwort 2 darstellen
         answerB2 = data[i].qa_list_gpt4[2]
         let ansB2 = document.createElement("input");
@@ -617,9 +558,6 @@ function appendData(data) {
         // ans2Label.for = "answ" + "_" + i + "_2"
         ansB2Label.innerHTML = answerB2 + '<br>'
 
-
-
-
         //Antwort 3 darstellen
         answerB3 = data[i].qa_list_gpt4[3]
         let ansB3 = document.createElement("input");
@@ -631,8 +569,6 @@ function appendData(data) {
         let ansB3Label = document.createElement("label");
         // ans3Label.for = "answ" + "_" + i + "_3"
         ansB3Label.innerHTML = answerB3 + '<br>';
-
-
 
         // Fragen nach AnswerOrder einfügen:
         if (answerOrderB ==1){
@@ -689,8 +625,6 @@ function appendData(data) {
         formQAB.appendChild(checkDivB);
        
  
-
-
         // CheckButton für Antworten
         let qaButtonB = document.createElement('button');
         qaButtonB.innerHTML = '? gpt4';
@@ -710,11 +644,9 @@ function appendData(data) {
 
 
 
-        /*         Wordle        */
+/* ----------------         Wordle        */
 
-
-
-
+        // wird als iFrame in Seite eingebettet
         let iframe = document.createElement('iframe');
         iframe.classList.add('hidden');
         iframe.classList.add('iframe');
@@ -722,6 +654,7 @@ function appendData(data) {
         iframe.id = idFrame;
         iframe.src = "wordle.html";
         iframe.width = "340px";
+        // Höhe variiert, je nach Anzahl der möglichen Wörter
         hei = 330
         if (data[i].five_letter_word_list.length > 20) {
             hei = 330;
@@ -745,11 +678,9 @@ function appendData(data) {
             hei = 560;
         }
 
-
         iframe.height = hei;
 
-
-
+        //
         let wordleButton = document.createElement('button');
         wordleButton.innerHTML = 'wordle';
         wordleButton.classList.add('buttonWordle');
@@ -765,12 +696,12 @@ function appendData(data) {
                 frame.classList.remove("visible");
                 frame.classList.add("hidden");
             }
+            // Infos welche Wörter es gibt, soll beim ersten klick an iFrame übergeben werden
             if (firstclick == true){
                 let message = {data: data[i].five_letter_word_list}
                 frame.contentWindow.postMessage(message, '*');
                 firstclick = false
             }
-
 
         };
 
@@ -779,20 +710,19 @@ function appendData(data) {
 
         
 
-        // Trennlinien und Button-Trennlinien erstellen
+        // Trennlinien erstellen
 
         let divLine = document.createElement("div");
         divLine.classList.add('line');
         divLine.innerHTML = '<br><br><hr><br><br>'
 
-
         let divLineExt =  document.createElement("h4");
         divLineExt.classList.add('lineEx');
-        divLineExt.innerHTML = '&nbsp;Original & extrahierende Zusammenfassungen&nbsp;'
+        divLineExt.innerHTML = '&nbsp;Original and extractive summaries&nbsp;'
 
         let divLineAbs =  document.createElement("h4");
         divLineAbs.classList.add('lineAbs');
-        divLineAbs.innerHTML = '&nbsp;Abstrahierende Zusammenfassungen&nbsp;'
+        divLineAbs.innerHTML = '&nbsp;Abstractive summaries&nbsp;'
 
         let divLineKey =  document.createElement("h4");
         divLineKey.classList.add('lineKey');
@@ -801,9 +731,10 @@ function appendData(data) {
 
         let divLineQA=  document.createElement("h4");
         divLineQA.classList.add('lineKey');
-        divLineQA.innerHTML = '&nbsp;Frage/Antworten/Quiz&nbsp;'
+        divLineQA.innerHTML = '&nbsp; Question/answers/quiz&nbsp;'
 
 
+        //Trennlinien und Button-Trennlinien in Maincontaier einfügen
         mainContainer.appendChild(divTitleheader);
         mainContainer.appendChild(divTitle);
         mainContainer.appendChild(divLead);

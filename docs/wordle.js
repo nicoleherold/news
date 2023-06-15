@@ -38,7 +38,7 @@ function countLetterInWord(letter, word) {
   return count;
 }
 
-// definiert dass wir in Zeile mit index 0 sind:
+// definiert, dass wir in Zeile mit index 0 sind:
 let wordRows = 0;
 
 const inputContainer = document.getElementById("inputs");
@@ -56,8 +56,19 @@ for (let i = 0; i < numberOfRows; i++) {
     letterInput.maxLength = 1;
     letterInput.id = "letter"+i+j;
     letterInput.type = "text";
+
+    // Funktion um zum nächsten Buchstaben zu springen
+    letterInput.addEventListener('input', function () {
+      if (this.value.length == this.maxLength) {
+          var next = this.nextElementSibling;
+          if (next) {
+              next.focus();
+          }
+      }
+  });
+
     
-    //falls nicht die erste Zeile, dann input nicht  möglich machen
+    //falls nicht die erste Zeile, dann input nicht möglich machen
     if (i !== 0) {
       letterInput.disabled = true;
       letterInput.classList.add("gray")
@@ -85,24 +96,48 @@ checkButton.addEventListener("click", () => {
     if (wordList.includes(guessedWord)) {
       let correct = 0;
       let incorrectCount = {};
+      foundCharacters = {}
       for (let i = 0; i < 5; i++) {
         //falls Buchstaben gleich, dann grün
         if (guessedWord[i] === chosenWord[i]) {
           inputs[i].classList.add("green");
           correct++;
+
+          if (!(guessedWord[i] in foundCharacters)) {
+            foundCharacters[guessedWord[i]] = 0;
+          }
+          foundCharacters[guessedWord[i]] = foundCharacters[guessedWord[i]] + 1;
+
+
+          // falls Buchstabe schon vorkam und auf orange gesetzt wurde --> nachkorrigieren:
+          // falls Buchstabe schon mal an falscher Stelle vorkam, aber nur einmal und derBuchstabe genau einmal vorkommt im Wort, dann organge-Klasse removen
+          if ((guessedWord[i] in incorrectCount) && (incorrectCount[guessedWord[i]].value == 1) && countLetterInWord(guessedWord[i], chosenWord)==1){
+            indexToChange = incorrectCount[guessedWord[i]].indexes[0]
+            inputs[indexToChange].classList.remove("orange");
+          }
+
+
           // falls Buchstabe vorkommt, dann checken wie oft er vorkommt und orange
         } else if (chosenWord.includes(guessedWord[i])) {
-            //buchstabe der im Wort vorkommt aber an falscher Stelle ist
+            //Buchstabe der im Wort vorkommt aber an falscher Stelle ist
             const letter = guessedWord[i];
             //falls letter noch nicht in Objekt incorrectCount vorhanden, dann reinschreiben mit Value 0
-            if (!incorrectCount.hasOwnProperty(letter)) {
-                incorrectCount[letter] = 0;
+            if (!(letter in incorrectCount)) {
+                incorrectCount[letter] = {value:0, indexes:[]};
+                
               }
+              console.log(incorrectCount)
               // falls schon vorhanden, dann um 1 erhöhen
-              incorrectCount[letter] = incorrectCount[letter] + 1;
+              number = incorrectCount[letter].value + 1
+              incorrectCount[letter].value = number;
+              incorrectCount[letter].indexes.push(i)
             // falls Anzahl des Buchstabens kleiner oder gleich der Anzahl des Letters im Wort ist: orange
-            if (incorrectCount[letter] <= countLetterInWord(letter, chosenWord)) {
+            if (incorrectCount[letter].value <= countLetterInWord(letter, chosenWord)) {
                 inputs[i].classList.add("orange");
+                // falls aber character bereits gefunden, also grün ist und der character nicht öfter vorkommt, dann nicht orange machen
+                if ((letter in foundCharacters) && (countLetterInWord(letter, chosenWord))<=foundCharacters[letter]){
+                  inputs[i].classList.remove("orange");
+                }
           }
         }
         // aktuelle geprüfte Zeile wird read only gesetzt
